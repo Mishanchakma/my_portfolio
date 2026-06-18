@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mishan Chakma | Mechatronics Portfolio</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-warning" href="#">MISHAN CHAKMA</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skills">Skills Tracker</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#roadmap">Roadmap</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#projects">Project Lab</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section d-flex align-items-center text-light bg-dark">
+        <div class="container text-center">
+            <div class="avatar-placeholder mx-auto mb-4 d-flex align-items-center justify-content-center rounded-circle border border-warning border-4 bg-secondary" style="width: 150px; height: 150px; overflow: hidden;">
+                <img src="image/profile.jpeg" alt="Mishan Chakma" style="width: 100%; height: 100%; object-fit: cover;">
+            </div>
+            <h1 class="display-4 fw-bold">MISHAN CHAKMA</h1>
+            <p class="lead text-warning fw-semibold">Mechatronics Technology Student & Aspiring Robotics Scientist</p>
+            <p class="mx-auto col-md-8 text-secondary">Documenting the iterative progress of building core engineering competencies across mechanical hardware, embedded electronics, and computing architectures.</p>
+            <div class="mt-4">
+                <a href="#skills" class="btn btn-warning btn-lg me-2 fw-bold">Track My Progress</a>
+                <!-- CV Button is fully visible and ready for your future PDF file -->
+                <a href="assets/Mishan_Chakma_CV.pdf" class="btn btn-outline-warning btn-lg me-2" download><i class="fa-solid fa-download me-2"></i>Download CV</a>
+                <a href="#contact" class="btn btn-outline-light btn-lg">Connect</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Me Section -->
+    <section id="about" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-4">Professional Profile</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-8 text-center text-muted">
+                    <p class="fs-5">I am a Mechatronics Technology student focused on systematic learning and iterative development. I approach engineering from first principles, building baseline skills in electronics, computer science, and CAD design. This platform serves as a transparent log of my transition from academic fundamentals to advanced robotics research.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Competency Matrix (Syllabus & Tracker) -->
+    <section id="skills" class="py-5 bg-white">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-2">Technical Competency Matrix</h2>
+            <p class="text-center text-muted mb-5">A structured breakdown of my current engineering pipeline and active skill development.</p>
+            
+            <div class="row g-4">
+                <!-- Category 1: Embedded & Power -->
+                <div class="col-md-4">
+                    <div class="skill-card p-4 shadow-sm rounded h-100 border-top border-warning border-3">
+                        <i class="fa-solid fa-microchip fa-2x text-warning mb-3"></i>
+                        <h5 class="fw-bold">Embedded & Power Architecture</h5>
+                        <ul class="list-unstyled text-muted small">
+                            <li><i class="fa-solid fa-spinner fa-spin text-warning me-2"></i>Arduino Framework</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>ESP32 Microcontroller</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>PID Control Algorithms</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Custom PCB Design (KiCad/Altium)</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Battery Management Systems (BMS)</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Raspberry Pi 5 Hardware Integration</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Category 2: Software & Intelligence -->
+                <div class="col-md-4">
+                    <div class="skill-card p-4 shadow-sm rounded h-100 border-top border-warning border-3">
+                        <i class="fa-solid fa-code fa-2x text-warning mb-3"></i>
+                        <h5 class="fw-bold">Software & Intelligence</h5>
+                        <ul class="list-unstyled text-muted small">
+                            <li><i class="fa-solid fa-spinner fa-spin text-warning me-2"></i>Core Logic (C / C++)</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Python Programming</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Linux OS (Ubuntu Environment)</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>ROS 2 (Robot Operating System)</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Advanced Engineering Mathematics</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Machine Learning Foundations</li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Category 3: Mechanical CAD & Automation -->
+                <div class="col-md-4">
+                    <div class="skill-card p-4 shadow-sm rounded h-100 border-top border-warning border-3">
+                        <i class="fa-solid fa-industry fa-2x text-warning mb-3"></i>
+                        <h5 class="fw-bold">Mechanical CAD & Automation</h5>
+                        <ul class="list-unstyled text-muted small">
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>Fusion 360 (Parametric & Assembly)</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>CNC Machine Operation & G-Code</li>
+                            <li><i class="fa-solid fa-circle-notch text-secondary me-2"></i>PLC (Programmable Logic Controller)</li>
+                            <li><i class="fa-solid fa-spinner fa-spin text-warning me-2"></i>Web Interfaces (HTML, CSS, Bootstrap)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Roadmap Target Section -->
+    <section id="roadmap" class="py-5 bg-dark text-light">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-2 text-warning">Future Milestones & Target Pipeline</h2>
+            <p class="text-center text-secondary mb-5">Paving a systematic path towards competitive robotics platforms and open-source contributions.</p>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="card bg-secondary text-light h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="fw-bold text-warning mb-3"><i class="fa-solid fa-code-branch me-2"></i>Open Source Targets</h5>
+                            <p class="small text-light-50">Preparing for global open-source programs like GSOC by mastering ROS 2 modules and actively parsing GitHub robotics codebases to contribute code in C++ and Python.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card bg-secondary text-light h-100 border-0 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="fw-bold text-warning mb-3"><i class="fa-solid fa-trophy me-2"></i>Technical Competitions</h5>
+                            <p class="small text-light-50">Targeting technical challenges such as national robot olympiads and university-level tech festivals to benchmark kinematics control systems and industrial automation hardware under constraints.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Lab Section -->
+    <section id="projects" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5">Project Lab & R&D Log</h2>
+            <div class="row g-4">
+                <!-- Project 1 -->
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0 project-card">
+                        <div class="card-img-placeholder d-flex flex-column align-items-center justify-content-center bg-secondary text-light p-5">
+                            <i class="fa-solid fa-spider fa-3x mb-2 text-warning"></i>
+                            <span class="badge bg-warning text-dark fw-bold">Planning & Simulation</span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Multi-Servo Spider Platform</h5>
+                            <p class="card-text text-muted small">Designing a multi-degree-of-freedom biomimetic system to evaluate multi-servo synchronization, locomotion stability loops, and embedded power distribution schemes.</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Project 2 -->
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm border-0 project-card">
+                        <div class="card-img-placeholder d-flex flex-column align-items-center justify-content-center bg-secondary text-light p-5">
+                            <i class="fa-solid fa-battery-three-quarters fa-3x mb-2 text-warning"></i>
+                            <span class="badge bg-warning text-dark fw-bold">Hardware Engineering</span>
+                        </div>
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">Autonomous Power & Flight Management</h5>
+                            <p class="card-text text-muted small">Analysing custom lithium-ion battery pack assembly guidelines, reliable Buck regulation circuits, and high-discharge BMS configurations for heavy servo payloads.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5 bg-dark text-light">
+        <div class="container">
+            <h2 class="text-center fw-bold mb-5 text-warning">Secure Connection Node</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form action="#" method="POST">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control bg-secondary text-light border-0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control bg-secondary text-light border-0" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-control bg-secondary text-light border-0" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100 fw-bold">Initialize Contact</button>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Footer & Social Accounts Links Live -->
+            <div class="text-center mt-5 pt-4 border-top border-secondary">
+                <a href="https://github.com/Mishanchakma" target="_blank" class="text-light mx-3 fs-3"><i class="fa-brands fa-github"></i></a>
+                <a href="https://www.linkedin.com/in/mishan-chakma-9a454428a/" target="_blank" class="text-light mx-3 fs-3"><i class="fa-brands fa-linkedin"></i></a>
+                <p class="mt-3 text-secondary small">&copy; 2026 MISHAN CHAKMA. Pipeline Active.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

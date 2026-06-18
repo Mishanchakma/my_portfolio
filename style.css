@@ -1,0 +1,114 @@
+/* ==========================================================================
+   CSS/style.css - Mishan Chakma Portfolio Custom Stylesheet
+   ========================================================================== */
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow-x: hidden;
+    background-color: #ffffff;
+}
+
+.hero-section {
+    min-height: 90vh;
+    background: linear-gradient(135deg, #212529 0%, #111416 100%);
+    padding: 80px 0;
+}
+
+.avatar-placeholder {
+    width: 150px;
+    height: 150px;
+    box-shadow: 0 8px 24px rgba(255, 193, 7, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.hero-section:hover .avatar-placeholder {
+    transform: scale(1.03);
+}
+
+.hero-section .btn-outline-warning {
+    color: #ffc107;
+    border-color: #ffc107;
+    transition: all 0.3s ease;
+}
+
+.hero-section .btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #212529;
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+}
+
+.skill-card {
+    background-color: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.skill-card ul li {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+}
+
+#roadmap .card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #2b3035 !important;
+}
+
+#roadmap .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(255, 193, 7, 0.1) !important;
+}
+
+.project-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.card-img-placeholder {
+    height: 180px;
+    background: linear-gradient(45deg, #495057, #343a40) !important;
+}
+
+.border-dashed {
+    border: 2px dashed #6c757d !important;
+    background-color: transparent !important;
+}
+
+#contact .form-control {
+    padding: 12px;
+    border-radius: 6px;
+    background-color: #2b3035 !important;
+    color: #f8f9fa !important;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#contact .form-control:focus {
+    background-color: #343a40 !important;
+    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25);
+    border: 1px solid #ffc107 !important;
+}
+
+#contact a i {
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+#contact a:hover i {
+    color: #ffc107 !important;
+    transform: scale(1.1);
+}
+
+
+
