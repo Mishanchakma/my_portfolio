@@ -184,21 +184,24 @@
             <h2 class="text-center fw-bold mb-5 text-warning">Secure Connection Node</h2>
             <div class="row justify-content-center">
                 <div class="col-md-6">
-                    <form action="#" method="POST">
-                        <div class="mb-3">
-                            <label class="form-label">Name</label>
-                            <input type="text" class="form-control bg-secondary text-light border-0" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-control bg-secondary text-light border-0" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Message</label>
-                            <textarea class="form-control bg-secondary text-light border-0" rows="4" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-warning w-100 fw-bold">Initialize Contact</button>
-                    </form>
+                    <form action="https://formspree.io/f/xjgdqpjk" method="POST">
+  <div class="mb-3">
+    <label class="text-light mb-1">Name</label>
+    <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+  </div>
+  
+  <div class="mb-3">
+    <label class="text-light mb-1">Email</label>
+    <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+  </div>
+  
+  <div class="mb-3">
+    <label class="text-light mb-1">Message</label>
+    <textarea name="message" class="form-control" rows="5" placeholder="Your Message" required></textarea>
+  </div>
+  
+  <button type="submit" class="btn btn-warning fw-bold text-dark w-100">Send Message</button>
+</form>
                 </div>
             </div>
             
