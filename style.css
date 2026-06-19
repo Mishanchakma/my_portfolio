@@ -1,114 +1,262 @@
 /* ==========================================================================
-   CSS/style.css - Mishan Chakma Portfolio Custom Stylesheet
+   Base & Existing Architecture Styling 
    ========================================================================== */
-
 html {
     scroll-behavior: smooth;
 }
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    overflow-x: hidden;
-    background-color: #ffffff;
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 .hero-section {
     min-height: 90vh;
-    background: linear-gradient(135deg, #212529 0%, #111416 100%);
-    padding: 80px 0;
+    background: #212529;
 }
 
-.avatar-placeholder {
-    width: 150px;
-    height: 150px;
-    box-shadow: 0 8px 24px rgba(255, 193, 7, 0.2);
-    transition: transform 0.3s ease;
+.fw-mono {
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 1px;
 }
 
-.hero-section:hover .avatar-placeholder {
-    transform: scale(1.03);
+.transition-theme {
+    transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-.hero-section .btn-outline-warning {
-    color: #ffc107;
-    border-color: #ffc107;
-    transition: all 0.3s ease;
+.project-item {
+    transition: transform 0.4s ease, opacity 0.4s ease;
 }
 
-.hero-section .btn-outline-warning:hover {
-    background-color: #ffc107;
-    color: #212529;
-    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
-}
-
-.skill-card {
-    background-color: #ffffff;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.skill-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
-}
-
-.skill-card ul li {
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-}
-
-#roadmap .card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: #2b3035 !important;
-}
-
-#roadmap .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(255, 193, 7, 0.1) !important;
-}
-
-.project-card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.project-item.hide {
+    transform: scale(0.8);
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
     overflow: hidden;
+    border: none;
 }
 
-.project-card:hover {
+/* ==========================================================================
+   Complete Light Theme Override Engine (All Bug Fixes Included)
+   ========================================================================== */
+body.light-theme {
+    background-color: #f8f9fa !important;
+    color: #212529 !important;
+}
+
+body.light-theme section,
+body.light-theme #about,
+body.light-theme #projects,
+body.light-theme #skills {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+}
+
+body.light-theme #about.bg-light,
+body.light-theme #projects.bg-light,
+body.light-theme #roadmap {
+    background-color: #f8f9fa !important;
+}
+
+/* Hero Section Light Fix */
+body.light-theme .hero-section {
+    background: #ffffff !important;
+    color: #212529 !important;
+}
+
+body.light-theme .hero-section h1.display-4 {
+    color: #212529 !important;
+}
+
+body.light-theme .hero-section p.text-secondary,
+body.light-theme .hero-section .section-desc {
+    color: #495057 !important;
+}
+
+body.light-theme .hero-section .btn-outline-light {
+    color: #212529 !important;
+    border-color: #212529 !important;
+}
+
+body.light-theme .hero-section .btn-outline-light:hover {
+    background-color: #212529 !important;
+    color: #ffffff !important;
+}
+
+/* Typing Text Light Fix */
+body.light-theme #typing-text {
+    color: #ffc107 !important;
+}
+
+/* Navbar Light Fix */
+body.light-theme .navbar {
+    background-color: #f8f9fa !important;
+    border-bottom: 1px solid #dee2e6;
+}
+
+body.light-theme .navbar-brand,
+body.light-theme .navbar-nav .nav-link {
+    color: #212529 !important;
+}
+
+/* Cards & Matrix Light Fix */
+body.light-theme .skill-card,
+body.light-theme .project-card,
+body.light-theme #roadmap .card.bg-secondary {
+    background-color: #ffffff !important;
+    color: #212529 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+    border-color: #ffc107 !important;
+}
+
+body.light-theme .section-title,
+body.light-theme .card-title-text,
+body.light-theme .custom-text,
+body.light-theme h2,
+body.light-theme h5,
+body.light-theme #roadmap h2.text-warning {
+    color: #212529 !important;
+}
+
+body.light-theme #roadmap p.text-secondary {
+    color: #495057 !important;
+}
+
+body.light-theme #roadmap .card h5.text-warning {
+    color: #ffc107 !important;
+}
+
+body.light-theme #roadmap .card p.text-light-50,
+body.light-theme .skill-card ul li span {
+    color: #212529 !important;
+}
+
+body.light-theme p.text-muted {
+    color: #6c757d !important;
+}
+
+/* Badge Light Fixes */
+body.light-theme .badge.bg-success-subtle {
+    background-color: #d1e7dd !important;
+    color: #0f5132 !important;
+}
+
+body.light-theme .badge.bg-warning-subtle {
+    background-color: #fff3cd !important;
+    color: #664d03 !important;
+}
+
+body.light-theme .badge.bg-info-subtle {
+    background-color: #cff4fc !important;
+    color: #055160 !important;
+}
+
+/* Live Clock & Footer Elements Light Fix */
+body.light-theme #system-clock {
+    color: #212529 !important;
+}
+
+body.light-theme #system-date {
+    color: #495057 !important;
+}
+
+body.light-theme #contact .text-light.mx-3 {
+    color: #212529 !important;
+}
+
+body.light-theme #contact .text-light.mx-3:hover {
+    color: #ffc107 !important;
+}
+
+/* Systems Lab Styling */
+#systems-lab .card {
+    transition: transform 0.3s;
+}
+
+#systems-lab .card:hover {
     transform: translateY(-5px);
+}
+
+#terminal-output {
+    background: #000;
+    line-height: 1.5;
+}
+
+/* Light Theme Adjustments for Lab */
+body.light-theme #systems-lab {
+    background-color: #ffffff !important;
+}
+
+body.light-theme #systems-lab .card {
+    background-color: #f8f9fa !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+body.light-theme #terminal-output {
+    background: #1e1e1e !important;
+}
+
+/* Fix for Hover State across all Cards */
+.skill-card, .project-card, #roadmap .card {
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out, box-shadow 0.3s ease, background-color 0.3s ease !important;
+}
+
+.skill-card:hover, .project-card:hover, #roadmap .card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Light Theme Hover Adjustments */
+body.light-theme .skill-card:hover, 
+body.light-theme .project-card:hover, 
+body.light-theme #roadmap .card:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
 }
 
-.card-img-placeholder {
-    height: 180px;
-    background: linear-gradient(45deg, #495057, #343a40) !important;
+/* Systems Lab Styling */
+#systems-lab .card {
+    transition: transform 0.3s;
 }
 
-.border-dashed {
-    border: 2px dashed #6c757d !important;
-    background-color: transparent !important;
+#systems-lab .card:hover {
+    transform: translateY(-5px) !important;
 }
 
-#contact .form-control {
-    padding: 12px;
-    border-radius: 6px;
-    background-color: #2b3035 !important;
-    color: #f8f9fa !important;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+#terminal-output {
+    background: #000;
+    line-height: 1.5;
 }
 
-#contact .form-control:focus {
-    background-color: #343a40 !important;
-    box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.25);
-    border: 1px solid #ffc107 !important;
+/* Global Transition & Fixed Hover Animations Engine */
+.skill-card, .project-card, #roadmap .card {
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out, box-shadow 0.3s ease, background-color 0.3s ease !important;
 }
 
-#contact a i {
-    transition: color 0.3s ease, transform 0.2s ease;
+.skill-card:hover, .project-card:hover, #roadmap .card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 10px 20px rgba(255, 193, 7, 0.2) !important;
 }
 
-#contact a:hover i {
-    color: #ffc107 !important;
-    transform: scale(1.1);
+/* Light Theme Adjustments for Lab & Hover */
+body.light-theme #systems-lab {
+    background-color: #ffffff !important;
 }
 
+body.light-theme #systems-lab .card {
+    background-color: #f8f9fa !important;
+    border: 1px solid #dee2e6 !important;
+}
 
+body.light-theme #terminal-output {
+    background: #1e1e1e !important;
+}
 
+body.light-theme .skill-card:hover, 
+body.light-theme .project-card:hover, 
+body.light-theme #roadmap .card:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+}
