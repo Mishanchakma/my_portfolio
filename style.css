@@ -1,262 +1,62 @@
-/* ==========================================================================
-   Base & Existing Architecture Styling 
-   ========================================================================== */
-html {
-    scroll-behavior: smooth;
+:root { --accent: #ffc107; }
+[data-bs-theme="light"] { --accent: #8a5d00; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+.text-accent { color: var(--accent) !important; }
+.navbar-nav .nav-link.active { color: var(--accent); font-weight: 600; }
+
+.btn-outline-warning {
+  --bs-btn-color: var(--accent); --bs-btn-border-color: var(--accent);
+  --bs-btn-hover-bg: #ffc107; --bs-btn-hover-border-color: #ffc107; --bs-btn-hover-color: #000;
+  --bs-btn-active-bg: #ffc107; --bs-btn-active-border-color: #ffc107; --bs-btn-active-color: #000;
 }
 
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: background-color 0.4s ease, color 0.4s ease;
+.hero { min-height: 88vh; }
+.avatar { width: 150px; height: 150px; object-fit: cover; border-radius: 50%; border: 4px solid #ffc107; background: var(--bs-secondary-bg); }
+
+.card { border-color: var(--bs-border-color); }
+.card.accent-top { border-top: 3px solid #ffc107; }
+
+.fade-in { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+.fade-in.in { opacity: 1; transform: none; }
+
+.timeline { border-left: 3px solid #ffc107; padding-left: 1.5rem; }
+.timeline-item { position: relative; margin-bottom: 1.5rem; }
+.timeline-item::before { content: ""; position: absolute; left: -1.95rem; top: .45rem; width: 12px; height: 12px; border-radius: 50%; background: #ffc107; }
+
+#terminal-output { background: #0d0d0d; color: #4ade80; flex: 1 1 0; min-height: 220px; overflow-y: auto; line-height: 1.5; }
+
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid #ffc107; outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .fade-in { opacity: 1; transform: none; transition: none; }
+  .fa-spin { animation: none; }
 }
 
-.hero-section {
-    min-height: 90vh;
-    background: #212529;
-}
+/* ---- extra animations & restored features ---- */
+.fw-mono { font-family: 'Courier New', monospace; letter-spacing: 1px; }
+#progress { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: #ffc107; transform: scaleX(0); transform-origin: left; z-index: 2000; }
+#to-top { position: fixed; right: 18px; bottom: 18px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #ffc107; color: #000; opacity: 0; pointer-events: none; transform: translateY(12px); transition: .3s; z-index: 1500; }
+#to-top.show { opacity: 1; pointer-events: auto; transform: none; }
+#bg-canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .6; }
+.grad { background: linear-gradient(90deg, var(--g1), var(--g2), var(--g1)); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 6s linear infinite; }
+:root { --g1: #ffc107; --g2: #ff7a18; }
+[data-bs-theme="light"] { --g1: #8a5d00; --g2: #c2410c; }
+@keyframes shine { to { background-position: -200% 0; } }
+.avatar { animation: ring 3s ease-in-out infinite; }
+@keyframes ring { 0%,100% { box-shadow: 0 0 0 0 rgba(255,193,7,.5); } 50% { box-shadow: 0 0 0 14px rgba(255,193,7,0); } }
+.tilt { transition: transform .25s ease, box-shadow .25s ease; will-change: transform; }
+.tilt.tilting { box-shadow: 0 12px 28px rgba(255,193,7,.25); }
+#theme-toggle.spin i { display: inline-block; animation: spin .5s ease; }
+@keyframes spin { from { transform: rotate(-180deg) scale(.4); } to { transform: none; } }
+.btn-warning, .btn-outline-warning { transition: transform .2s ease, box-shadow .2s ease; }
+.btn-warning:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(255,193,7,.35); }
+#lang-select { min-width: 110px; }
+@media (prefers-reduced-motion: reduce) { .grad, .avatar, #theme-toggle.spin i { animation: none; } .grad { color: var(--g1); background: none; } .tilt { transition: none; } }
 
-.fw-mono {
-    font-family: 'Courier New', Courier, monospace;
-    letter-spacing: 1px;
-}
-
-.transition-theme {
-    transition: background-color 0.4s ease, color 0.4s ease;
-}
-
-.project-item {
-    transition: transform 0.4s ease, opacity 0.4s ease;
-}
-
-.project-item.hide {
-    transform: scale(0.8);
-    opacity: 0;
-    position: absolute;
-    width: 0;
-    height: 0;
-    padding: 0;
-    margin: 0;
-    overflow: hidden;
-    border: none;
-}
-
-/* ==========================================================================
-   Complete Light Theme Override Engine (All Bug Fixes Included)
-   ========================================================================== */
-body.light-theme {
-    background-color: #f8f9fa !important;
-    color: #212529 !important;
-}
-
-body.light-theme section,
-body.light-theme #about,
-body.light-theme #projects,
-body.light-theme #skills {
-    background-color: #ffffff !important;
-    color: #212529 !important;
-}
-
-body.light-theme #about.bg-light,
-body.light-theme #projects.bg-light,
-body.light-theme #roadmap {
-    background-color: #f8f9fa !important;
-}
-
-/* Hero Section Light Fix */
-body.light-theme .hero-section {
-    background: #ffffff !important;
-    color: #212529 !important;
-}
-
-body.light-theme .hero-section h1.display-4 {
-    color: #212529 !important;
-}
-
-body.light-theme .hero-section p.text-secondary,
-body.light-theme .hero-section .section-desc {
-    color: #495057 !important;
-}
-
-body.light-theme .hero-section .btn-outline-light {
-    color: #212529 !important;
-    border-color: #212529 !important;
-}
-
-body.light-theme .hero-section .btn-outline-light:hover {
-    background-color: #212529 !important;
-    color: #ffffff !important;
-}
-
-/* Typing Text Light Fix */
-body.light-theme #typing-text {
-    color: #ffc107 !important;
-}
-
-/* Navbar Light Fix */
-body.light-theme .navbar {
-    background-color: #f8f9fa !important;
-    border-bottom: 1px solid #dee2e6;
-}
-
-body.light-theme .navbar-brand,
-body.light-theme .navbar-nav .nav-link {
-    color: #212529 !important;
-}
-
-/* Cards & Matrix Light Fix */
-body.light-theme .skill-card,
-body.light-theme .project-card,
-body.light-theme #roadmap .card.bg-secondary {
-    background-color: #ffffff !important;
-    color: #212529 !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
-    border-color: #ffc107 !important;
-}
-
-body.light-theme .section-title,
-body.light-theme .card-title-text,
-body.light-theme .custom-text,
-body.light-theme h2,
-body.light-theme h5,
-body.light-theme #roadmap h2.text-warning {
-    color: #212529 !important;
-}
-
-body.light-theme #roadmap p.text-secondary {
-    color: #495057 !important;
-}
-
-body.light-theme #roadmap .card h5.text-warning {
-    color: #ffc107 !important;
-}
-
-body.light-theme #roadmap .card p.text-light-50,
-body.light-theme .skill-card ul li span {
-    color: #212529 !important;
-}
-
-body.light-theme p.text-muted {
-    color: #6c757d !important;
-}
-
-/* Badge Light Fixes */
-body.light-theme .badge.bg-success-subtle {
-    background-color: #d1e7dd !important;
-    color: #0f5132 !important;
-}
-
-body.light-theme .badge.bg-warning-subtle {
-    background-color: #fff3cd !important;
-    color: #664d03 !important;
-}
-
-body.light-theme .badge.bg-info-subtle {
-    background-color: #cff4fc !important;
-    color: #055160 !important;
-}
-
-/* Live Clock & Footer Elements Light Fix */
-body.light-theme #system-clock {
-    color: #212529 !important;
-}
-
-body.light-theme #system-date {
-    color: #495057 !important;
-}
-
-body.light-theme #contact .text-light.mx-3 {
-    color: #212529 !important;
-}
-
-body.light-theme #contact .text-light.mx-3:hover {
-    color: #ffc107 !important;
-}
-
-/* Systems Lab Styling */
-#systems-lab .card {
-    transition: transform 0.3s;
-}
-
-#systems-lab .card:hover {
-    transform: translateY(-5px);
-}
-
-#terminal-output {
-    background: #000;
-    line-height: 1.5;
-}
-
-/* Light Theme Adjustments for Lab */
-body.light-theme #systems-lab {
-    background-color: #ffffff !important;
-}
-
-body.light-theme #systems-lab .card {
-    background-color: #f8f9fa !important;
-    border: 1px solid #dee2e6 !important;
-}
-
-body.light-theme #terminal-output {
-    background: #1e1e1e !important;
-}
-
-/* Fix for Hover State across all Cards */
-.skill-card, .project-card, #roadmap .card {
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out, box-shadow 0.3s ease, background-color 0.3s ease !important;
-}
-
-.skill-card:hover, .project-card:hover, #roadmap .card:hover {
-    transform: translateY(-5px) !important;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
-}
-
-/* Light Theme Hover Adjustments */
-body.light-theme .skill-card:hover, 
-body.light-theme .project-card:hover, 
-body.light-theme #roadmap .card:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
-}
-
-/* Systems Lab Styling */
-#systems-lab .card {
-    transition: transform 0.3s;
-}
-
-#systems-lab .card:hover {
-    transform: translateY(-5px) !important;
-}
-
-#terminal-output {
-    background: #000;
-    line-height: 1.5;
-}
-
-/* Global Transition & Fixed Hover Animations Engine */
-.skill-card, .project-card, #roadmap .card {
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out, box-shadow 0.3s ease, background-color 0.3s ease !important;
-}
-
-.skill-card:hover, .project-card:hover, #roadmap .card:hover {
-    transform: translateY(-5px) !important;
-    box-shadow: 0 10px 20px rgba(255, 193, 7, 0.2) !important;
-}
-
-/* Light Theme Adjustments for Lab & Hover */
-body.light-theme #systems-lab {
-    background-color: #ffffff !important;
-}
-
-body.light-theme #systems-lab .card {
-    background-color: #f8f9fa !important;
-    border: 1px solid #dee2e6 !important;
-}
-
-body.light-theme #terminal-output {
-    background: #1e1e1e !important;
-}
-
-body.light-theme .skill-card:hover, 
-body.light-theme .project-card:hover, 
-body.light-theme #roadmap .card:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
-}
+.typing-line { min-height: 1.6em; }
+@media (max-width: 575px) { .typing-line { min-height: 3.2em; } }
+.btn-outline-secondary { --bs-btn-color: var(--bs-body-color); --bs-btn-border-color: var(--bs-secondary-color); --bs-btn-hover-bg: var(--bs-body-color); --bs-btn-hover-color: var(--bs-body-bg); --bs-btn-hover-border-color: var(--bs-body-color); --bs-btn-active-bg: var(--bs-body-color); --bs-btn-active-color: var(--bs-body-bg); }
