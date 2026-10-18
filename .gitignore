@@ -1,0 +1,12 @@
+backend/
+admin/
+.env
+node_modules
+*.bak
+.DS_Store
+backend/
+admin/
+.env
+node_modules
+*.bak
+.DS_Store

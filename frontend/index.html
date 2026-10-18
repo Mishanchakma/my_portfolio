@@ -136,6 +136,7 @@
     <div class="col-md-6 mx-auto">
       <div id="form-alert" class="alert d-none" role="alert"></div>
       <form id="contact-form" action="https://formspree.io/f/xjgdqpjk" method="POST">
+        <input type="text" name="website" tabindex="-1" autocomplete="off" class="d-none" aria-hidden="true">
         <div class="mb-3"><label for="c-name" class="form-label" data-i18n="name">Name</label><input id="c-name" type="text" name="name" class="form-control" required></div>
         <div class="mb-3"><label for="c-email" class="form-label" data-i18n="email">Email</label><input id="c-email" type="email" name="email" class="form-control" required></div>
         <div class="mb-3"><label for="c-msg" class="form-label" data-i18n="msg">Message</label><textarea id="c-msg" name="message" rows="5" class="form-control" required></textarea></div>
@@ -152,6 +153,7 @@
 </section>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="config.js"></script>
 <script src="lang.js"></script>
 <script src="data.js"></script>
 <script src="script.js"></script>

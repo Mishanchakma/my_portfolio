@@ -1,4 +1,4 @@
-/* lang.js — UI অনুবাদ (৮ ভাষা)। নতুন লেখা বদলাতে চাইলে এখানে এডিট করো। */
+/* lang.js — UI translations (8 languages). Edit here to change UI text. */
 window.LANG = {
   en: { about:"About me", education:"Education", skills:"Skills", projects:"Projects", activities:"Activities", roadmap:"Roadmap", lab:"Systems Lab", contact:"Contact", all:"All",
     heroSub:"Mechatronics Technology Student",

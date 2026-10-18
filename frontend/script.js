@@ -2,7 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const D = window.DATA || {}, TR = window.LANG || {};
   const $ = (s) => document.querySelector(s), $$ = (s) => document.querySelectorAll(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const safeUrl = (u) => (/^https?:\/\//.test(u) ? esc(u) : "");
+  const safeUrl = (u) => (/^(https?:\/\/|image\/|assets\/)[^\s"'<>]*$/.test(String(u || "")) ? esc(u) : "");
+  // ব্যাকএন্ড: লোকাল ঠিকানা শুধু লোকাল পেজেই চলবে (ভুল করে GitHub-এ গেলেও সাইট ভাঙবে না)
+  const API = (() => {
+    const u = String(window.API_URL || "").replace(/\/$/, ""); if (!u) return "";
+    const isLocalApi = /^http:\/\/(localhost|127\.0\.0\.1)/.test(u), onLocal = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+    return isLocalApi && !onLocal ? "" : u;
+  })();
   const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const store = { get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
 
@@ -111,8 +117,22 @@ document.addEventListener("DOMContentLoaded", () => {
   applyLang();
 
   // ---------- Hero counters ----------
-  const counts = { projects: (D.projects || []).length, activities: (D.activities || []).length, skills: (D.skills || []).reduce((a, g) => a + g.items.length, 0) };
-  $$("[data-count]").forEach((el) => { const n = counts[el.dataset.count] || 0; let i = 0; (function s() { el.textContent = i; if (i < n) { i++; setTimeout(s, RM ? 0 : 80); } })(); });
+  function updateCounts() {
+    const counts = { projects: (D.projects || []).length, activities: (D.activities || []).length, skills: (D.skills || []).reduce((a, g) => a + (g.items || []).length, 0) };
+    $$("[data-count]").forEach((el) => { const n = counts[el.dataset.count] || 0; let i = 0; clearTimeout(el._t); (function s() { el.textContent = i; if (i < n) { i++; el._t = setTimeout(s, RM ? 0 : 80); } })(); });
+  }
+  updateCounts();
+
+  // ---------- ব্যাকএন্ড থেকে লাইভ কনটেন্ট (না পেলে data.js-ই থাকে) ----------
+  if (API) {
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 5000);
+    fetch(API + "/api/data", { signal: ctl.signal }).then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((d) => {
+        let changed = false;
+        ["education", "skills", "projects", "activities", "roadmap"].forEach((k) => { if (Array.isArray(d[k]) && d[k].length) { D[k] = d[k]; changed = true; } });
+        if (changed) { renderAll(); updateCounts(); }
+      }).catch(() => {}).finally(() => clearTimeout(timer));
+  }
 
   // ---------- Typing effect ----------
   const roles = ["Aspiring Robotics Scientist", "Embedded Systems Learner", "Future ROS 2 Developer"];
@@ -182,7 +202,9 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault(); btn.disabled = true; btn.textContent = "...";
     const show = (ok, m) => { box.className = "alert " + (ok ? "alert-success" : "alert-danger"); box.textContent = m; };
     try {
-      const res = await fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
+      const res = API
+        ? await fetch(API + "/api/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(Object.fromEntries(new FormData(form))) })
+        : await fetch(form.action, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } });
       if (!res.ok) throw new Error(); show(true, t("ok")); form.reset();
     } catch (err) { show(false, t("err")); }
     finally { btn.disabled = false; btn.textContent = t("send"); }
