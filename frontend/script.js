@@ -2,10 +2,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const D = window.DATA || {}, TR = window.LANG || {};
   const $ = (s) => document.querySelector(s), $$ = (s) => document.querySelectorAll(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  // অ্যাডমিন থেকে আপলোড করা ছবি "/api/file/..." হিসেবে সেভ হয়; ব্যাকএন্ড চালু থাকলেই সেটা দেখানো যায়
+ // Images uploaded from the admin panel are saved as "/api/file/..."; they can only be shown if the backend is running
   const mediaUrl = (u) => { u = String(u || ""); return u.startsWith("/api/file/") ? (API ? API + u : "") : u; };
   const safeUrl = (u) => { u = mediaUrl(u); return /^(https?:\/\/|image\/|assets\/)[^\s"'<>]*$/.test(u) ? esc(u) : ""; };
-  // ব্যাকএন্ড: লোকাল ঠিকানা শুধু লোকাল পেজেই চলবে (ভুল করে GitHub-এ গেলেও সাইট ভাঙবে না)
+  // Backend: local address will only run on the local page (site will not break even if mistakenly pushed to GitHub)
   const API = (() => {
     const u = String(window.API_URL || "").replace(/\/$/, ""); if (!u) return "";
     const isLocalApi = /^http:\/\/(localhost|127\.0\.0\.1)/.test(u), onLocal = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const t = (k) => (TR[lang] && TR[lang][k]) || (TR.en && TR.en[k]) || "";
   const L = (o, k) => o[k + "_" + lang] || o[k];
 
-  // ---------- সাইট সেটিংস (অ্যাডমিন প্যানেল থেকে) ----------
+  // ---------- Site Settings (from admin panel) ----------
   const S = () => D.site || {};
   const LS = (k) => S()[k + "_" + lang] || S()[k] || "";
   const DEFAULT_ROLES = ["Aspiring Robotics Scientist", "Embedded Systems Learner", "Future ROS 2 Developer"];
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (lab.powerLabel) $("#power-label").textContent = lab.powerLabel;
   }
 
-  // নাম, ছবি, CV, লেখা, Lab আর সেকশন লুকানো — সব অ্যাডমিনের দেওয়া মান অনুযায়ী
+  // Name, image, CV, text, Lab, and section hiding — all according to the values provided by the admin
   function applySite() {
     const s = S(), f = s.files || {}, name = s.name || "Mishan Chakma";
     ["#brand-name", "#hero-name", "#footer-name"].forEach((id) => { const el = $(id); if (el) el.textContent = name; });
@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   updateCounts();
 
-  // ---------- ব্যাকএন্ড থেকে লাইভ কনটেন্ট (না পেলে data.js-ই থাকে) ----------
+ // ---------- Live content from backend (falls back to data.js if unreachable) ----------
   if (API) {
     const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 15000);
     fetch(API + "/api/data", { signal: ctl.signal }).then((r) => (r.ok ? r.json() : Promise.reject()))

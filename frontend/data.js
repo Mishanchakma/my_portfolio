@@ -1,4 +1,4 @@
-/* data.js — Admin panel থেকে তৈরি। এই ফাইলটা frontend/data.js-এর জায়গায় বসাও। */
+/* data.js — Generated from the Admin panel. Replace frontend/data.js with this file. */
 window.DATA = {
   "projects": [
     {
