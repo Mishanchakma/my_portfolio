@@ -46,6 +46,7 @@ window.DATA = {
     {
       "date": "2026-01",
       "type": "Competition",
+      "draft": true,
       "title": "[EXAMPLE] Robotics Competition Name",
       "org": "Organizer / City",
       "result": "Participant (or: 2nd place, Finalist ...)",
@@ -57,9 +58,9 @@ window.DATA = {
   "education": [
     {
       "degree": "Diploma in Mechatronics Technology",
-      "place": "[EDIT] Your Institute Name",
-      "period": "[EDIT] 2024 – 2028",
-      "score": "[EDIT] CGPA 0.00 / 4.00 (current)",
+      "place": "",
+      "period": "",
+      "score": "",
       "note": "Electronics, programming, CAD and automation fundamentals."
     }
   ],

@@ -2,13 +2,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const D = window.DATA || {}, TR = window.LANG || {};
   const $ = (s) => document.querySelector(s), $$ = (s) => document.querySelectorAll(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const safeUrl = (u) => (/^(https?:\/\/|image\/|assets\/)[^\s"'<>]*$/.test(String(u || "")) ? esc(u) : "");
+  // অ্যাডমিন থেকে আপলোড করা ছবি "/api/file/..." হিসেবে সেভ হয়; ব্যাকএন্ড চালু থাকলেই সেটা দেখানো যায়
+  const mediaUrl = (u) => { u = String(u || ""); return u.startsWith("/api/file/") ? (API ? API + u : "") : u; };
+  const safeUrl = (u) => { u = mediaUrl(u); return /^(https?:\/\/|image\/|assets\/)[^\s"'<>]*$/.test(u) ? esc(u) : ""; };
   // ব্যাকএন্ড: লোকাল ঠিকানা শুধু লোকাল পেজেই চলবে (ভুল করে GitHub-এ গেলেও সাইট ভাঙবে না)
   const API = (() => {
     const u = String(window.API_URL || "").replace(/\/$/, ""); if (!u) return "";
     const isLocalApi = /^http:\/\/(localhost|127\.0\.0\.1)/.test(u), onLocal = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
     return isLocalApi && !onLocal ? "" : u;
   })();
+  // Items marked "draft" in the admin are never shown (the server also hides them)
+  const pub = (k) => (Array.isArray(D[k]) ? D[k] : []).filter((x) => x && !x.draft);
   const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const store = { get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
 
@@ -17,6 +21,71 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!TR[lang]) { const nl = (navigator.language || "en").slice(0, 2).toLowerCase(); lang = TR[nl] ? nl : "en"; }
   const t = (k) => (TR[lang] && TR[lang][k]) || (TR.en && TR.en[k]) || "";
   const L = (o, k) => o[k + "_" + lang] || o[k];
+
+  // ---------- সাইট সেটিংস (অ্যাডমিন প্যানেল থেকে) ----------
+  const S = () => D.site || {};
+  const LS = (k) => S()[k + "_" + lang] || S()[k] || "";
+  const DEFAULT_ROLES = ["Aspiring Robotics Scientist", "Embedded Systems Learner", "Future ROS 2 Developer"];
+  const DEFAULT_LOGS = ["[ROS 2] /kinematics_node loop: 50 Hz", "[BMS] Cell balance OK. Pack: 12.38 V", "[INFO] Joint telemetry synchronized", "[WARN] Control loop latency spike", "[INFO] Node graph healthy"];
+  let roles = DEFAULT_ROLES, labLogs = DEFAULT_LOGS;
+  // Typing animation settings (from admin): speeds in ms, clamped to safe ranges
+  const num = (v, d, lo, hi) => { v = Number(v); return Number.isFinite(v) && v !== 0 ? Math.min(hi, Math.max(lo, v)) : d; };
+  const T = () => {
+    const t = S().typing || {};
+    return { speed: num(t.speed, 60, 15, 500), deleteSpeed: num(t.deleteSpeed, 30, 10, 500), pause: num(t.pause, 2000, 300, 10000), shuffle: t.order === "Shuffle", cursor: t.cursor !== "Off" };
+  };
+  const term = $("#terminal-output");
+
+  function setAvatar() {
+    const wrap = $("#avatar-wrap"); if (!wrap) return;
+    const f = (S().files || {}).profile;
+    const src = API && f ? `${API}/api/file/profile?v=${f}` : "image/profile.jpeg";
+    if (wrap.dataset.src === src) return;
+    wrap.dataset.src = src;
+    const name = S().name || "Mishan Chakma";
+    const initials = name.split(/\s+/).map((w) => w[0]).join("").slice(0, 2).toUpperCase();
+    const fallback = () => { const sp = document.createElement("span"); sp.className = "avatar d-inline-flex align-items-center justify-content-center fs-1 fw-bold text-accent"; sp.textContent = initials; wrap.replaceChildren(sp); };
+    const img = new Image(); img.className = "avatar"; img.alt = "Portrait of " + name;
+    img.onerror = () => { if (src !== "image/profile.jpeg") { img.onerror = fallback; img.src = "image/profile.jpeg"; } else fallback(); };
+    img.src = src; wrap.replaceChildren(img);
+  }
+
+  function applyLab(lab) {
+    const note = lab["note_" + lang] || lab.note; if (note) $("#lab-note").textContent = note;
+    const intro = (lab.intro || []).filter(Boolean), key = JSON.stringify(intro);
+    if (intro.length && term.dataset.intro !== key) {
+      term.dataset.intro = key;
+      term.replaceChildren(...intro.map((l) => { const d = document.createElement("div"); d.textContent = "> " + l; return d; }));
+    }
+    const logs = (lab.logs || []).filter(Boolean); labLogs = logs.length ? logs : DEFAULT_LOGS;
+    if (lab.cad) $("#lab-cad").textContent = lab.cad;
+    const nodes = (lab.nodes || []).filter(Boolean);
+    if (nodes.length) $("#lab-nodes").innerHTML = '<span class="text-body-secondary">[ROS 2 Graph View]</span><br>' + nodes.map((n, i) => `<span class="badge border border-${["info", "warning", "success"][i % 3]} text-body">${esc(n)}</span>`).join(" &rarr; ");
+    if (lab.servoLabel) $("#servo-label").textContent = lab.servoLabel;
+    if (lab.powerLabel) $("#power-label").textContent = lab.powerLabel;
+  }
+
+  // নাম, ছবি, CV, লেখা, Lab আর সেকশন লুকানো — সব অ্যাডমিনের দেওয়া মান অনুযায়ী
+  function applySite() {
+    const s = S(), f = s.files || {}, name = s.name || "Mishan Chakma";
+    ["#brand-name", "#hero-name", "#footer-name"].forEach((id) => { const el = $(id); if (el) el.textContent = name; });
+    if (s.name) document.title = name + " | Mechatronics Portfolio";
+    [["#hero-sub", "heroSub"], ["#hero-desc", "heroDesc"], ["#about-text", "aboutText"], ["#research", "research"]].forEach(([sel, k]) => { const v = LS(k), el = $(sel); if (v && el) el.textContent = v; });
+    setAvatar();
+    const cv = $("#cv-link"); if (cv) cv.href = API && f.cv ? `${API}/api/file/cv?dl=1&v=${f.cv}` : "assets/Mishan_Chakma_CV.pdf";
+    const cvView = $("#cv-view"); if (cvView) cvView.href = API && f.cv ? `${API}/api/file/cv?v=${f.cv}` : "assets/Mishan_Chakma_CV.pdf";
+    // Typing lines: current language's list first, then the shared list, then built-in defaults
+    const pick = [s["roles_" + lang], s.roles].map((a) => (Array.isArray(a) ? a.filter(Boolean) : [])).find((a) => a.length);
+    roles = pick || DEFAULT_ROLES;
+    const typingEl = $("#typing-text"); if (typingEl) typingEl.classList.toggle("typing-cursor", T().cursor);
+    const hidden = s.hidden || [];
+    ["about", "education", "skills", "projects", "activities", "roadmap", "lab"].forEach((id) => {
+      const off = hidden.includes(id), sec = $("#" + id), a = $('#navMenu a[href="#' + id + '"]');
+      if (sec) sec.classList.toggle("d-none", off);
+      if (a) a.closest("li").classList.toggle("d-none", off);
+    });
+    applyLab(s.lab || {});
+  }
 
   // ---------- Theme ----------
   const root = document.documentElement, themeBtn = $("#theme-toggle");
@@ -43,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const sIcon = { "Stable": '<i class="fa-solid fa-circle-check text-success me-2"></i>', "Active Build": '<i class="fa-solid fa-spinner fa-spin text-warning me-2"></i>', "Research": '<i class="fa-solid fa-flask text-info me-2"></i>' };
   const sBadge = { "Stable": "success", "Active Build": "warning", "Research": "info" };
   const pBadge = { "Planning": "secondary", "Building": "warning", "Completed": "success" };
-  const links = (o) => [["github", "fa-github", "Code"], ["video", "fa-video", "Video"], ["link", "fa-link", "Link"]].filter(([k]) => safeUrl(o[k]))
+  const links = (o) => [["github", "fa-github", t("codeLbl")], ["video", "fa-video", t("videoLbl")], ["link", "fa-link", t("linkLbl")]].filter(([k]) => safeUrl(o[k]))
     .map(([k, i, l]) => `<a href="${safeUrl(o[k])}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-warning me-1"><i class="fa-solid ${i} me-1"></i>${l}</a>`).join("");
 
   function filtered(gridSel, barSel, items, key, card) {
@@ -63,21 +132,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---------- Render all data-driven sections ----------
   function renderAll() {
-    $("#education-list").innerHTML = (D.education || []).map((e) => `
+    $("#education-list").innerHTML = pub("education").map((e) => `
       <div class="col-md-8 fade-in"><div class="card accent-top tilt"><div class="card-body">
-        <h3 class="h5 fw-bold">${esc(L(e, "degree"))}</h3><p class="mb-1">${esc(L(e, "place"))}</p>
-        <p class="mb-1 text-body-secondary small">${esc(e.period)} · ${esc(e.score)}</p><p class="mb-0 small">${esc(L(e, "note"))}</p>
+        <h3 class="h5 fw-bold">${esc(L(e, "degree"))}</h3>${L(e, "place") ? `<p class="mb-1">${esc(L(e, "place"))}</p>` : ""}
+        ${[e.period, e.score].filter(Boolean).length ? `<p class="mb-1 text-body-secondary small">${[e.period, e.score].filter(Boolean).map(esc).join(" · ")}</p>` : ""}<p class="mb-0 small">${esc(L(e, "note"))}</p>
       </div></div></div>`).join("");
 
-    $("#skills-grid").innerHTML = (D.skills || []).map((g) => `
+    $("#skills-grid").innerHTML = pub("skills").map((g) => `
       <div class="col-md-4 fade-in"><div class="card accent-top h-100 tilt"><div class="card-body">
         <i class="fa-solid ${esc(g.icon)} fa-2x text-accent mb-3"></i><h3 class="h5 fw-bold mb-3">${esc(L(g, "group"))}</h3>
         <ul class="list-unstyled small mb-0">${g.items.map(([n, s]) => `<li class="d-flex justify-content-between align-items-center mb-2"><span>${sIcon[s] || ""}${esc(n)}</span><span class="badge text-bg-${sBadge[s] || "secondary"}">${esc(s)}</span></li>`).join("")}</ul>
       </div></div></div>`).join("");
 
-    filtered("#projects-grid", "#project-filters", D.projects || [], "category", (p, i) => `
+    filtered("#projects-grid", "#project-filters", pub("projects"), "category", (p, i) => `
       <div class="col-md-6 fade-in"><div class="card h-100 tilt overflow-hidden">
-        ${safeUrl(p.image) ? `<img src="${safeUrl(p.image)}" class="card-img-top" alt="${esc(p.title)}">` : `<div class="d-flex flex-column align-items-center justify-content-center bg-body-secondary py-5"><i class="fa-solid ${esc(p.icon || "fa-robot")} fa-3x text-accent"></i></div>`}
+        ${safeUrl(p.image) ? `<img src="${safeUrl(p.image)}" class="card-img-top" loading="lazy" decoding="async" alt="${esc(p.title)}">` : `<div class="d-flex flex-column align-items-center justify-content-center bg-body-secondary py-5"><i class="fa-solid ${esc(p.icon || "fa-robot")} fa-3x text-accent"></i></div>`}
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-start mb-2"><h3 class="h5 fw-bold mb-0">${esc(L(p, "title"))}</h3><span class="badge text-bg-${pBadge[p.status] || "secondary"}">${esc(p.status)}</span></div>
           <p class="small text-body-secondary">${esc(L(p, "desc"))}</p>
@@ -87,24 +156,26 @@ document.addEventListener("DOMContentLoaded", () => {
           ${links(p)}
         </div></div></div>`);
 
-    const acts = [...(D.activities || [])].sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    const acts = [...pub("activities")].sort((a, b) => String(b.date).localeCompare(String(a.date)));
     filtered("#activity-timeline", "#activity-filters", acts, "type", (a) => `
       <div class="timeline-item fade-in">
         <div class="small text-body-secondary">${esc(a.date)} · <span class="badge text-bg-warning">${esc(a.type)}</span></div>
         <h3 class="h5 fw-bold mb-1">${esc(L(a, "title"))}</h3>
         <div class="small">${esc(a.org)}${a.result ? ` · <strong>${esc(L(a, "result"))}</strong>` : ""}</div>
         <p class="small text-body-secondary mb-2">${esc(L(a, "desc"))}</p>
-        ${safeUrl(a.image) ? `<img src="${safeUrl(a.image)}" class="img-fluid rounded mb-2" alt="${esc(a.title)}">` : ""}${links(a)}
+        ${safeUrl(a.image) ? `<img src="${safeUrl(a.image)}" class="img-fluid rounded mb-2" loading="lazy" decoding="async" alt="${esc(a.title)}">` : ""}${links(a)}
       </div>`);
 
-    $("#roadmap-list").innerHTML = (D.roadmap || []).map((s) => `
+    $("#roadmap-list").innerHTML = pub("roadmap").map((s) => `
       <div class="col-md-6 col-lg-3 fade-in"><div class="card h-100 accent-top tilt"><div class="card-body">
         <h3 class="h5 fw-bold text-accent">${esc(L(s, "stage"))}</h3><p class="small text-body-secondary mb-2">${esc(L(s, "period"))}</p><p class="small mb-0">${esc(L(s, "goal"))}</p>
       </div></div></div>`).join("");
 
-    const ct = D.contact || {};
-    $("#contact-email").textContent = ct.email ? "Email: " + ct.email : "";
-    $("#gh-link").href = ct.github || "#"; $("#in-link").href = ct.linkedin || "#";
+    const sc = Object.fromEntries(Object.entries((D.site || {}).contact || {}).filter(([, v]) => v));
+    const ct = { ...(D.contact || {}), ...sc };
+    const hrefOk = (u) => (/^https?:\/\//i.test(String(u || "")) ? u : "#");
+    $("#contact-email").textContent = ct.email ? t("emailLbl") + ": " + ct.email : "";
+    $("#gh-link").href = hrefOk(ct.github); $("#in-link").href = hrefOk(ct.linkedin);
     reveal();
   }
 
@@ -112,35 +183,41 @@ document.addEventListener("DOMContentLoaded", () => {
     root.lang = lang; $("#lang-select").value = lang;
     $$("[data-i18n]").forEach((el) => { const v = t(el.dataset.i18n); if (v) el.textContent = v; });
     renderAll();
+    applySite();
   }
   $("#lang-select").addEventListener("change", (e) => { lang = TR[e.target.value] ? e.target.value : "en"; store.set("lang", lang); applyLang(); });
   applyLang();
 
   // ---------- Hero counters ----------
   function updateCounts() {
-    const counts = { projects: (D.projects || []).length, activities: (D.activities || []).length, skills: (D.skills || []).reduce((a, g) => a + (g.items || []).length, 0) };
+    const counts = { projects: pub("projects").length, activities: pub("activities").length, skills: pub("skills").reduce((a, g) => a + (g.items || []).length, 0) };
     $$("[data-count]").forEach((el) => { const n = counts[el.dataset.count] || 0; let i = 0; clearTimeout(el._t); (function s() { el.textContent = i; if (i < n) { i++; el._t = setTimeout(s, RM ? 0 : 80); } })(); });
   }
   updateCounts();
 
   // ---------- ব্যাকএন্ড থেকে লাইভ কনটেন্ট (না পেলে data.js-ই থাকে) ----------
   if (API) {
-    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 5000);
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), 15000);
     fetch(API + "/api/data", { signal: ctl.signal }).then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((d) => {
-        let changed = false;
-        ["education", "skills", "projects", "activities", "roadmap"].forEach((k) => { if (Array.isArray(d[k]) && d[k].length) { D[k] = d[k]; changed = true; } });
-        if (changed) { renderAll(); updateCounts(); }
+        const kinds = ["education", "skills", "projects", "activities", "roadmap"];
+        if (kinds.some((k) => Array.isArray(d[k]) && d[k].length)) kinds.forEach((k) => { if (Array.isArray(d[k])) D[k] = d[k]; });
+        if (d.site && typeof d.site === "object") D.site = d.site;
+        applyLang(); updateCounts();
       }).catch(() => {}).finally(() => clearTimeout(timer));
   }
 
   // ---------- Typing effect ----------
-  const roles = ["Aspiring Robotics Scientist", "Embedded Systems Learner", "Future ROS 2 Developer"];
   const typing = $("#typing-text"); let r = 0, c = 0, del = false;
   (function type() {
-    const w = roles[r]; c += del ? -1 : 1; typing.textContent = w.substring(0, c);
-    let d = del ? 30 : 60;
-    if (!del && c === w.length) { d = 2000; del = true; } else if (del && c === 0) { del = false; r = (r + 1) % roles.length; d = 300; }
+    const cfg = T(), w = roles[r % roles.length] || ""; c = Math.max(0, Math.min(w.length, c + (del ? -1 : 1))); typing.textContent = w.substring(0, c);
+    let d = del ? cfg.deleteSpeed : cfg.speed;
+    if (!del && c >= w.length) { d = cfg.pause; del = true; }
+    else if (del && c === 0) {
+      del = false; d = 300;
+      if (cfg.shuffle && roles.length > 1) { let n; do { n = Math.floor(Math.random() * roles.length); } while (n === r % roles.length); r = n; }
+      else r = (r + 1) % roles.length;
+    }
     setTimeout(type, d);
   })();
 
@@ -222,11 +299,9 @@ document.addEventListener("DOMContentLoaded", () => {
   tick(); setInterval(tick, 1000);
 
   // ---------- Simulated lab ----------
-  const term = $("#terminal-output");
-  const logs = ["[ROS 2] /kinematics_node loop: 50 Hz", "[BMS] Cell balance OK. Pack: 12.38 V", "[INFO] Joint telemetry synchronized", "[WARN] Control loop latency spike", "[INFO] Node graph healthy"];
   setInterval(() => {
     if (document.hidden) return;
-    const d = document.createElement("div"); d.textContent = "> " + logs[Math.floor(Math.random() * logs.length)];
+    const d = document.createElement("div"); d.textContent = "> " + labLogs[Math.floor(Math.random() * labLogs.length)];
     term.appendChild(d); while (term.children.length > 40) term.removeChild(term.firstChild); term.scrollTop = term.scrollHeight;
   }, 3000);
   setInterval(() => { $("#servo-bar").style.width = Math.random() * 30 + 50 + "%"; $("#power-bar").style.width = Math.random() * 15 + 80 + "%"; }, 2000);

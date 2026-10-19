@@ -8,6 +8,13 @@
   <meta property="og:title" content="Mishan Chakma | Mechatronics Portfolio">
   <meta property="og:description" content="Education, projects, competitions and skills of a mechatronics student.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://YOUR-DOMAIN/">
+  <meta property="og:image" content="https://YOUR-DOMAIN/frontend/image/profile.jpeg">
+  <meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://YOUR-DOMAIN/">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Mishan Chakma","jobTitle":"Mechatronics Technology student","url":"https://YOUR-DOMAIN/","address":{"@type":"PostalAddress","addressLocality":"Dhaka","addressCountry":"BD"},"sameAs":["https://github.com/Mishanchakma","https://www.linkedin.com/in/mishan-chakma-9a454428a/"]}</script>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdnjs.cloudflare.com; img-src 'self' data: https: http://localhost:* http://127.0.0.1:*; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -20,7 +27,7 @@
 
 <nav id="mainNav" class="navbar navbar-expand-xl bg-body-tertiary sticky-top border-bottom">
   <div class="container">
-    <a class="navbar-brand fw-bold text-accent" href="#home">Mishan Chakma</a>
+    <a class="navbar-brand fw-bold text-accent" href="#home" id="brand-name">Mishan Chakma</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Open menu"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navMenu">
       <ul class="navbar-nav ms-auto align-items-lg-center">
@@ -44,26 +51,28 @@
 <header id="home" class="hero d-flex align-items-center position-relative overflow-hidden">
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
   <div class="container text-center position-relative">
-    <img src="image/profile.jpeg" alt="Portrait of Mishan Chakma" class="avatar mb-4" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'avatar d-inline-flex align-items-center justify-content-center fs-1 fw-bold text-accent mb-4',textContent:'MC'}))">
-    <h1 class="display-4 fw-bold grad">Mishan Chakma</h1>
-    <p class="lead fw-semibold mb-2" data-i18n="heroSub">Mechatronics Technology Student</p>
+    <div id="avatar-wrap" class="mb-4"></div>
+    <h1 id="hero-name" class="display-4 fw-bold grad">Mishan Chakma</h1>
+    <p id="hero-sub" class="lead fw-semibold mb-2" data-i18n="heroSub">Mechatronics Technology Student</p>
     <p class="lead text-accent fw-semibold typing-line"><span id="typing-text"></span></p>
-    <p class="mx-auto col-md-8 text-body-secondary" data-i18n="heroDesc">I document my path from diploma fundamentals to robotics research: what I build, what I learn, and the competitions I take part in.</p>
+    <p id="hero-desc" class="mx-auto col-md-8 text-body-secondary" data-i18n="heroDesc">I document my path from diploma fundamentals to robotics research: what I build, what I learn, and the competitions I take part in.</p>
     <div class="mt-4 d-flex flex-wrap gap-2 justify-content-center">
       <a href="#projects" class="btn btn-warning btn-lg fw-bold" data-i18n="btnProj">See my projects</a>
-      <a href="assets/Mishan_Chakma_CV.pdf" class="btn btn-outline-warning btn-lg" download><i class="fa-solid fa-download me-2"></i><span data-i18n="btnCv">Download CV</span></a>
+      <a id="cv-link" href="assets/Mishan_Chakma_CV.pdf" class="btn btn-outline-warning btn-lg" download><i class="fa-solid fa-download me-2"></i><span data-i18n="btnCv">Download CV</span></a>
+      <a id="cv-view" href="assets/Mishan_Chakma_CV.pdf" target="_blank" rel="noopener" class="btn btn-outline-secondary btn-lg"><i class="fa-solid fa-eye me-2"></i><span data-i18n="btnCvView">View CV</span></a>
       <a href="#contact" class="btn btn-outline-secondary btn-lg" data-i18n="contact">Contact</a>
     </div>
     <div class="row justify-content-center mt-5 g-3"><div class="col-4 col-md-2"><div class="h2 fw-bold text-accent mb-0" data-count="projects">0</div><div class="small text-body-secondary" data-i18n="projects">Projects</div></div><div class="col-4 col-md-2"><div class="h2 fw-bold text-accent mb-0" data-count="activities">0</div><div class="small text-body-secondary" data-i18n="activities">Activities</div></div><div class="col-4 col-md-2"><div class="h2 fw-bold text-accent mb-0" data-count="skills">0</div><div class="small text-body-secondary" data-i18n="skills">Skills</div></div></div>
   </div>
 </header>
 
+<main id="main">
 <section id="about" class="py-5">
   <div class="container">
     <h2 class="text-center fw-bold mb-4" data-i18n="about">About me</h2>
     <div class="col-md-8 mx-auto text-center text-body-secondary fs-5">
-      <p data-i18n="aboutText">I study Mechatronics Technology and learn by building: electronics, programming and CAD, starting from first principles. My goal is a BSc, MSc and PhD in robotics, and this site is the record of that journey.</p>
-      <p class="fs-6 mb-0"><strong class="text-body">Research interests:</strong> [EDIT] robot kinematics, embedded control, power systems for robots.</p>
+      <p id="about-text" data-i18n="aboutText">I study Mechatronics Technology and learn by building: electronics, programming and CAD, starting from first principles. My goal is a BSc, MSc and PhD in robotics, and this site is the record of that journey.</p>
+      <p class="fs-6 mb-0"><strong class="text-body"><span data-i18n="researchLbl">Research interests</span>:</strong> <span id="research">robot kinematics, embedded control, power systems for robots.</span></p>
     </div>
   </div>
 </section>
@@ -79,9 +88,9 @@
   <div class="container">
     <h2 class="text-center fw-bold mb-2" data-i18n="skills">Skills</h2>
     <p class="text-center text-body-secondary mb-4">
-      <span class="badge text-bg-success">Stable</span> I use it confidently &nbsp;
-      <span class="badge text-bg-warning">Active Build</span> I am building with it now &nbsp;
-      <span class="badge text-bg-info">Research</span> I am learning it
+      <span class="badge text-bg-success">Stable</span> <span data-i18n="legStable">I use it confidently</span> &nbsp;
+      <span class="badge text-bg-warning">Active Build</span> <span data-i18n="legActive">I am building with it now</span> &nbsp;
+      <span class="badge text-bg-info">Research</span> <span data-i18n="legResearch">I am learning it</span>
     </p>
     <div id="skills-grid" class="row g-4"></div>
   </div>
@@ -98,7 +107,7 @@
 <section id="activities" class="py-5">
   <div class="container">
     <h2 class="text-center fw-bold mb-2" data-i18n="activities">Activities</h2>
-    <p class="text-center text-body-secondary mb-4">Everything I take part in outside the classroom, newest first.</p>
+    <p class="text-center text-body-secondary mb-4" data-i18n="actSub">Everything I take part in outside the classroom, newest first.</p>
     <div id="activity-filters" class="d-flex flex-wrap justify-content-center gap-2 mb-4"></div>
     <div id="activity-timeline" class="timeline col-lg-8 mx-auto"></div>
   </div>
@@ -114,17 +123,17 @@
 <section id="lab" class="py-5">
   <div class="container">
     <h2 class="text-center fw-bold mb-2" data-i18n="lab">Systems Lab</h2>
-    <p class="text-center text-body-secondary mb-4">Simulated demo: the terminal, graph and telemetry below are generated for display, not read from a real robot.</p>
+    <p id="lab-note" class="text-center text-body-secondary mb-4">Simulated demo: the terminal, graph and telemetry below are generated for display, not read from a real robot.</p>
     <div class="row g-4">
       <div class="col-md-6"><div class="card h-100 border-warning d-flex flex-column"><div class="card-header small fw-bold">ROS 2 Node Terminal (simulated)</div>
         <div id="terminal-output" class="p-3 font-monospace small" role="log" aria-live="off">&gt; Initializing ROS 2 workspace...<br>&gt; Bringing up spider_robot_nodes...<br>&gt; [INFO] Kinematics engine: READY</div></div></div>
       <div class="col-md-6"><div class="card h-100"><div class="card-body">
         <h3 class="h6 fw-bold text-accent mb-3">CAD Mesh &amp; ROS NodeGraph</h3>
-        <div class="text-center py-4 mb-3 border border-warning rounded bg-body-secondary"><i class="fa-solid fa-cube fa-2x fa-spin text-accent mb-1"></i><p class="small m-0 font-monospace">[Awaiting Fusion 360 mesh export]</p></div>
-        <div class="p-2 border rounded font-monospace small text-center mb-3"><span class="text-body-secondary">[ROS 2 Graph View]</span><br>
+        <div class="text-center py-4 mb-3 border border-warning rounded bg-body-secondary"><i class="fa-solid fa-cube fa-2x fa-spin text-accent mb-1"></i><p id="lab-cad" class="small m-0 font-monospace">[Awaiting Fusion 360 mesh export]</p></div>
+        <div id="lab-nodes" class="p-2 border rounded font-monospace small text-center mb-3"><span class="text-body-secondary">[ROS 2 Graph View]</span><br>
           <span class="badge border border-info text-body">/teleop_node</span> &rarr; <span class="badge border border-warning text-body">/kinematics_engine</span> &rarr; <span class="badge border border-success text-body">/servo_driver_node</span></div>
-        <small>Servo loop frequency</small><div class="progress mb-3" style="height:8px"><div id="servo-bar" class="progress-bar bg-warning" style="width:50%"></div></div>
-        <small>Power bus stability</small><div class="progress" style="height:8px"><div id="power-bar" class="progress-bar bg-info" style="width:85%"></div></div>
+        <small id="servo-label">Servo loop frequency</small><div class="progress mb-3" style="height:8px"><div id="servo-bar" class="progress-bar bg-warning" style="width:50%"></div></div>
+        <small id="power-label">Power bus stability</small><div class="progress" style="height:8px"><div id="power-bar" class="progress-bar bg-info" style="width:85%"></div></div>
       </div></div></div>
     </div>
   </div>
@@ -140,6 +149,7 @@
         <div class="mb-3"><label for="c-name" class="form-label" data-i18n="name">Name</label><input id="c-name" type="text" name="name" class="form-control" required></div>
         <div class="mb-3"><label for="c-email" class="form-label" data-i18n="email">Email</label><input id="c-email" type="email" name="email" class="form-control" required></div>
         <div class="mb-3"><label for="c-msg" class="form-label" data-i18n="msg">Message</label><textarea id="c-msg" name="message" rows="5" class="form-control" required></textarea></div>
+        <p class="small text-body-secondary" data-i18n="privacy">Your message is sent to my inbox and used only to reply to you.</p>
         <button type="submit" id="form-submit-btn" class="btn btn-warning fw-bold w-100" data-i18n="send">Send message</button>
       </form>
     </div>
@@ -147,10 +157,11 @@
       <p id="contact-email" class="mb-2"></p>
       <a id="gh-link" href="#" target="_blank" rel="noopener" class="fs-3 mx-3 text-body" aria-label="GitHub"><i class="fa-brands fa-github"></i></a>
       <a id="in-link" href="#" target="_blank" rel="noopener" class="fs-3 mx-3 text-body" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
-      <div class="fw-mono text-accent fs-5 fw-bold mb-1"><span data-i18n="yourTime">Your local time</span>: <span id="live-time">--:--:--</span></div><div class="small text-body-secondary" id="live-date"></div><div class="small text-body-secondary mt-1"><span data-i18n="myTime">My time (Dhaka)</span>: <span id="owner-time">--:--</span></div><p class="mt-3 mb-0 text-body-secondary small">&copy; 2026 Mishan Chakma</p>
+      <div class="fw-mono text-accent fs-5 fw-bold mb-1"><span data-i18n="yourTime">Your local time</span>: <span id="live-time">--:--:--</span></div><div class="small text-body-secondary" id="live-date"></div><div class="small text-body-secondary mt-1"><span data-i18n="myTime">My time (Dhaka)</span>: <span id="owner-time">--:--</span></div><p class="mt-3 mb-0 text-body-secondary small">&copy; 2026 <span id="footer-name">Mishan Chakma</span></p>
     </div>
   </div>
 </section>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="config.js"></script>

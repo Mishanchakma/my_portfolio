@@ -58,5 +58,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 @media (prefers-reduced-motion: reduce) { .grad, .avatar, #theme-toggle.spin i { animation: none; } .grad { color: var(--g1); background: none; } .tilt { transition: none; } }
 
 .typing-line { min-height: 1.6em; }
+.typing-cursor::after { content: "|"; margin-left: 2px; font-weight: 300; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .typing-cursor::after { animation: none; } }
 @media (max-width: 575px) { .typing-line { min-height: 3.2em; } }
 .btn-outline-secondary { --bs-btn-color: var(--bs-body-color); --bs-btn-border-color: var(--bs-secondary-color); --bs-btn-hover-bg: var(--bs-body-color); --bs-btn-hover-color: var(--bs-body-bg); --bs-btn-hover-border-color: var(--bs-body-color); --bs-btn-active-bg: var(--bs-body-color); --bs-btn-active-color: var(--bs-body-bg); }
